@@ -1,6 +1,6 @@
 RedGreenBlue 1.1.1 - (c) Copyright 1997-2001 Peter Karlsson
 A Softwolves Software Release in 2001
-http://www.softwolves.pp.se/
+http://www.softwolves.pp.se/sw/
 softwolves@softwolves.pp.se
 
 ENGLISH DOCUMENTATION
@@ -67,7 +67,8 @@ Thanks to YOU for trying it out.
 
 RödGrönBlå 1.1.1 - (c) Copyright 1997-2001 Peter Karlsson
 A Softwolves Software Release in 2001
-http://www.softwolves.pp.se/
+http://www.softwolves.pp.se/sw/
+softwolves@softwolves.pp.se
 
 SVENSK DOKUMENTATION
 
@@ -123,4 +124,4 @@ Tack till DIG för att du testar programmet.
 1.0  - 1997-08-02
 1.01 - 1997-10-22 - Added French and Spanish
 1.1  - 1999-06-08 - Added HSV, HTML name and direct code editing
-1.1.1- 2001-04-26 - Win32 version; Delphi 4.0; Fix problems with large fonts
+1.1.1- 2001-04-29 - Win32 version; Delphi 4.0; Fix problems with large fonts

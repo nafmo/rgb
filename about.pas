@@ -44,7 +44,7 @@ end;
 
 procedure TfAbout.lWebClick(Sender: TObject);
 begin
-  ShellExecute(Handle, 'open', PChar('http://www.softwolves.pp.se/wolves/'),
+  ShellExecute(Handle, 'open', PChar('http://www.softwolves.pp.se/sw/'),
                '', 'C:\', SW_SHOWNORMAL);
 end;
 
