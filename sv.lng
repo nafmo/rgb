@@ -1,0 +1,53 @@
+; RedGreenBlue language file
+; (c) Copyright 2001 Peter Karlsson
+; A Softwolves Software Release in 2001
+
+; If you translate RedGreenBlue into another language, please contact
+; us at softwolves@softwolves.pp.se
+; http://www.softwolves.pp.se/sw/
+
+[Meta]
+Language=sv
+Title=RödGrönBlå
+Version=1.2
+
+[Menu]
+; File menu
+File=&Arkiv
+
+; Color menu
+Color=&Färg
+Color.Manual=&Manuellt val...
+
+; View menu
+View=&Visa
+View.RGB=&RGB-värden
+View.HSV=&HSV-värden
+View.Sample=&Exempelfönster
+
+; Help menu
+Help=&Hjälp
+Help.About=&Om...
+
+[Main]
+; Main window
+Title=Färginställning
+Red=&Röd
+Green=&Grön
+Blue=&Blå
+Hue=&Nyans
+Saturation=&Mättnad
+Value=&Ljus
+
+[Main.Help]
+; Help popups for main window
+
+[Sample]
+; Colour sample window
+Title=Färgexempel
+Copy=Ko&piera
+CopyAll=Kopiera &allt
+Paste=K&listra in
+
+[Sample.Help]
+; Help popups for colour sample window

@@ -5,7 +5,8 @@ uses
   Rgbu in 'RGBU.PAS' {fRGB},
   IniFiles,
   About in 'ABOUT.PAS' {fAbout},
-  SysUtils;
+  SysUtils,
+  sampleu in 'sampleu.pas' {fSample};
 
 {$R *.RES}
 var
@@ -20,6 +21,7 @@ begin
   Application.Title := 'RödGrönBlå';
   Application.CreateForm(TfRGB, fRGB);
   Application.CreateForm(TfAbout, fAbout);
+  Application.CreateForm(TfSample, fSample);
   fRGB.colours[0] := fRGB.rBlack;
   fRGB.colours[1] := fRGB.rSilver;
   fRGB.colours[2] := fRGB.rGray;

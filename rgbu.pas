@@ -5,79 +5,65 @@ interface
 uses
   SysUtils, WinTypes, WinProcs, Messages, Classes, Graphics, Controls,
   Forms, Dialogs, StdCtrls, ExtCtrls, Clipbrd, IniFiles, TabNotBk, About,
-  ComCtrls;
+  ComCtrls, Menus, SampleU;
 
 type
   TfRGB = class(TForm)
     gbAll: TGroupBox;
     lHTML: TLabel;
-    bQuit: TButton;
-    bAbout: TButton;
     iPictureRGB: TImage;
-    tabColour: TTabbedNotebook;
-    lRed: TLabel;
-    lGreen: TLabel;
-    lBlue: TLabel;
-    eBlue: TEdit;
-    eGreen: TEdit;
-    eRed: TEdit;
-    sRed: TScrollBar;
-    sGreen: TScrollBar;
-    sBlue: TScrollBar;
-    lValue: TLabel;
-    lSaturation: TLabel;
-    lHue: TLabel;
-    sValue: TScrollBar;
-    eValue: TEdit;
-    eHue: TEdit;
-    eSaturation: TEdit;
-    sSaturation: TScrollBar;
-    sHue: TScrollBar;
-    rBlack: TRadioButton;
-    rSilver: TRadioButton;
-    rGray: TRadioButton;
-    rWhite: TRadioButton;
-    rMaroon: TRadioButton;
-    rRed: TRadioButton;
-    rPurple: TRadioButton;
-    rFuchsia: TRadioButton;
-    rGreen: TRadioButton;
-    rLime: TRadioButton;
-    rOlive: TRadioButton;
-    rYellow: TRadioButton;
-    rNavy: TRadioButton;
-    rBlue: TRadioButton;
-    rTeal: TRadioButton;
-    rAqua: TRadioButton;
-    rOther: TRadioButton;
-    eHTML: TEdit;
-    lCode1: TLabel;
-    lCode3: TLabel;
-    bCopy: TButton;
-    bPaste: TButton;
     dColor: TColorDialog;
+    paColor: TPanel;
+    pColor: TPaintBox;
+    mRGBMenu: TMainMenu;
+    mFile: TMenuItem;
+    mFileExit: TMenuItem;
+    mView: TMenuItem;
+    mViewSampleWindow: TMenuItem;
+    mHelp: TMenuItem;
+    mHelpAbout: TMenuItem;
+    mViewRGB: TMenuItem;
+    N1: TMenuItem;
+    mViewHSV: TMenuItem;
+    mColor: TMenuItem;
+    mColorBlack: TMenuItem;
+    mColorSilver: TMenuItem;
+    mColorGray: TMenuItem;
+    mColorWhite: TMenuItem;
+    mColorMaroon: TMenuItem;
+    mColorRed: TMenuItem;
+    mColorPurple: TMenuItem;
+    mColorFuchsia: TMenuItem;
+    mColorGreen: TMenuItem;
+    mColorLime: TMenuItem;
+    mColorOlive: TMenuItem;
+    mColorYellow: TMenuItem;
+    mColorNavy: TMenuItem;
+    mColorBlue: TMenuItem;
+    mColorTeal: TMenuItem;
+    mColorAqua: TMenuItem;
+    N2: TMenuItem;
+    mColorSelect: TMenuItem;
+    lInput1: TLabel;
+    lInput2: TLabel;
+    lInput3: TLabel;
+    eInput3: TEdit;
+    eInput2: TEdit;
+    eInput1: TEdit;
+    sInput1: TScrollBar;
+    sInput2: TScrollBar;
+    sInput3: TScrollBar;
     bDecAll: TButton;
     bIncAll4: TButton;
     bDecAll4: TButton;
     bIncAll: TButton;
-    cPart: TComboBox;
-    lCode2: TLabel;
-    paSample: TPanel;
-    pBackground: TPaintBox;
-    lHTMLLink: TLabel;
-    lHTMLALink: TLabel;
-    lHTMLVlink: TLabel;
-    lHTMLText: TLabel;
-    bSelect: TButton;
-    bCopyAll: TButton;
-    paColor: TPanel;
-    pColor: TPaintBox;
-    procedure sRedChange(Sender: TObject);
-    procedure sGreenChange(Sender: TObject);
-    procedure sBlueChange(Sender: TObject);
-    procedure eRedChange(Sender: TObject);
-    procedure eGreenChange(Sender: TObject);
-    procedure eBlueChange(Sender: TObject);
+    procedure sInput1Change(Sender: TObject);
+    procedure sInput2Change(Sender: TObject);
+    procedure sInput3Change(Sender: TObject);
+    procedure eInput1Change(Sender: TObject);
+    procedure eInput2Change(Sender: TObject);
+    procedure eInput3Change(Sender: TObject);
+    procedure updateDisplay;
     procedure updateHTML(fromhsv, updatenames: boolean);
     procedure updateHTML2(Sender: TObject);
     procedure bQuitClick(Sender: TObject);
@@ -116,14 +102,23 @@ type
     procedure lHTMLALinkClick(Sender: TObject);
     procedure lHTMLVlinkClick(Sender: TObject);
     procedure pBackgroundClick(Sender: TObject);
+    procedure gbAllClick(Sender: TObject);
+    procedure mColorClick(Sender: TObject);
+    procedure mColorSelectClick(Sender: TObject);
+    procedure mHelpAboutClick(Sender: TObject);
+    procedure mFileExitClick(Sender: TObject);
+    procedure mViewRGBClick(Sender: TObject);
+    procedure mViewHSVClick(Sender: TObject);
+    procedure mViewSampleWindowClick(Sender: TObject);
   private
     { Private declarations }
     inupdate: boolean;
     function hex(b: byte): string;
     function TColor_2_Hex(c: TColor): string;
+    { Aktuell färg }
+    r, g, b: single;
   public
     rgbmode: boolean;
-    colours: array[0..16] of TRadioButton;
     currcol: array[0..5]  of TColor;
     { Public declarations }
   end;
@@ -160,9 +155,84 @@ begin
                   hex((c shr 16) and 255);
 end;
 
+{ *** Uppdatera visning *** }
+
+procedure TfRGB.updateDisplay;
+Var
+  h, s, v: single;
+  ir, ig, ib: word;
+  str: string;
+  rgbcolor: TColor;
+  rect: TRect;
+begin
+  { Undvik oändlig rekursion }
+  if inupdate or not initdone then exit;
+  inupdate := true;
+
+  ir := trunc(r * 255);
+  ig := trunc(g * 255);
+  ib := trunc(b * 255);
+
+  if rgbmode then
+  begin
+    { Sätt in RGB-värden  }
+
+    { Uppdatera rullningslister }
+    sInput1.Position := ir;
+    sInput2.Position := ig;
+    sInput3.Position := ib;
+
+    { Uppdatera inmatningsfält }
+    Str(ir, str);
+    eInput1.Text := str;
+    Str(ig, str);
+    eInput2.Text := str;
+    Str(ib, str);
+    eInput3.Text := str;
+  end else begin
+    { Sätt in HSV-värden  }
+    RGB_2_HSV(r, g, b, h, s, v);
+
+    { Uppdatera rullningslister }
+    sInput1.Position := trunc(h * 10);
+    sInput2.Position := trunc(s * 100);
+    sInput3.Position := trunc(v * 100);
+
+    { Uppdatera inmatningsfält }
+    Str(sInput1.Position / 10:1:1, str);
+    eInput1.Text := str;
+    Str(sInput2.Position / 100:1:2, str);
+    eInput2.Text := str;
+    Str(sInput3.Position / 100:1:2, str);
+    eInput3.Text := str;
+  end;
+
+  { Rita om kvadraten }
+  rect.Left  := 0;
+  rect.Top   := 0;
+  rect.Right := pColor.Width;
+  rect.Bottom:= pColor.Height;
+  rgbcolor := ir or longint(ig) shl 8 or longint(ib) shl 16;
+  pColor.Canvas.Brush.Color := rgbcolor;
+  pColor.Color := rgbcolor;
+  pColor.Canval.FillRect(rect);
+
+  { COMCTL-färgdialogen }
+  dColor.Color := rgbcolor;
+
+  { Uppdatera färgnummeretiketten }
+  lHTML.Caption := '#' + Hex(ir) + Hex(ig) + Hex(ib);
+
+  { Uppdatera färgexempel }
+  if fSample.Visible then
+    fSample.doUpdate(ir, ig, ib);
+
+  inupdate := false;
+end;
+
 { *** Rullningslister *** }
 
-procedure TfRGB.sRedChange(Sender: TObject);
+procedure TfRGB.sInput1Change(Sender: TObject);
 Var
   s: string;
 begin
@@ -171,7 +241,7 @@ begin
   fRGB.updateHTML(false, true);
 end;
 
-procedure TfRGB.sGreenChange(Sender: TObject);
+procedure TfRGB.sInput2Change(Sender: TObject);
 Var
   s: string;
 begin
@@ -180,7 +250,7 @@ begin
   fRGB.updateHTML(false, true);
 end;
 
-procedure TfRGB.sBlueChange(Sender: TObject);
+procedure TfRGB.sInput3Change(Sender: TObject);
 Var
   s: string;
 begin
@@ -220,7 +290,7 @@ end;
 
 { *** Redigeringsrutor *** }
 
-procedure TfRGB.eRedChange(Sender: TObject);
+procedure TfRGB.eInput1Change(Sender: TObject);
 Var
   v: word;
   t: integer;
@@ -234,7 +304,7 @@ begin
   end;
 end;
 
-procedure TfRGB.eGreenChange(Sender: TObject);
+procedure TfRGB.eInput2Change(Sender: TObject);
 Var
   v: word;
   t: integer;
@@ -248,7 +318,7 @@ begin
   end;
 end;
 
-procedure TfRGB.eBlueChange(Sender: TObject);
+procedure TfRGB.eInput3Change(Sender: TObject);
 Var
   v: word;
   t: integer;
@@ -329,34 +399,8 @@ end;
 { ***  *** }
 
 
-procedure TfRGB.bQuitClick(Sender: TObject);
-var
-  rgbini: TIniFile;
-  i: byte;
-begin
-  rgbini := TIniFile.Create('win.ini');
-  rgbini.WriteInteger('HTMLRGB', 'R', fRGB.sRed.Position);
-  rgbini.WriteInteger('HTMLRGB', 'G', fRGB.sGreen.Position);
-  rgbini.WriteInteger('HTMLRGB', 'B', fRGB.sBlue.Position);
-  rgbini.WriteInteger('HTMLRGB', 'X', fRGB.Left);
-  rgbini.WriteInteger('HTMLRGB', 'Y', fRGB.Top);
-  rgbini.WriteInteger('HTMLRGB', 'Mode', fRGB.tabColour.PageIndex);
-  rgbini.WriteInteger('HTMLRGB', 'Index', fRGB.cPart.ItemIndex);
-  for i := 0 to 4 do
-    rgbini.WriteString('HTMLRGB', 'Color' + Char(i + 48),
-                       TColor_2_Hex(currcol[i]));
-  rgbini.Free;
-  Halt;
-end;
-
 procedure TfRGB.bAboutClick(Sender: TObject);
 begin
-{
-  MessageDlg(fRGB.Caption + #13#10'© 1997-1999 Peter Karlsson'#13#10'A Softwolves Software release in 1999'#13#10 +
-             'softwolves@softwolves.pp.se'#13#10'http://www.softwolves.pp.se/',
-             mtInformation, [mbOk], 0);
-}
-  fAbout.ShowModal;
 end;
 
 procedure TfRGB.lHTMLClick(Sender: TObject);
@@ -578,24 +622,8 @@ begin
   sBlue.Position := b;
 end;
 
-procedure TfRGB.bCopyClick(Sender: TObject);
-begin
-  ClipBoard.AsText := fRGB.eHTML.Text;
-end;
 
-
-procedure TfRGB.bPasteClick(Sender: TObject);
-var
-  s: string;
-begin
-  s := ClipBoard.AsText;
-  if length(s) = 6 then
-    fRGB.eHTML.Text := s
-  else if (s[1] = '#') and (length(s) = 7) then
-    fRGB.eHTML.Text := Copy(s, 2, 6);
-end;
-
-procedure TfRGB.bSelectClick(Sender: TObject);
+procedure TfRGB.mColorSelectClick(Sender: TObject);
 var
   r, g, b: byte;
 begin
@@ -710,15 +738,6 @@ begin
   initdone := true;
 end;
 
-procedure TfRGB.bCopyAllClick(Sender: TObject);
-begin
-  ClipBoard.AsText := '<body bgcolor="#' + TColor_2_Hex(currcol[0]) +
-                      '" text="#'        + TColor_2_Hex(currcol[1]) +
-                      '" link="#'        + TColor_2_Hex(currcol[2]) +
-                      '" alink="#'       + TColor_2_Hex(currcol[3]) +
-                      '" vlink="#'       + TColor_2_Hex(currcol[4]) + '">';
-end;
-
 procedure TfRGB.lHTMLTextClick(Sender: TObject);
 begin
   cPart.ItemIndex := 1;
@@ -747,6 +766,78 @@ procedure TfRGB.pBackgroundClick(Sender: TObject);
 begin
   cPart.ItemIndex := 0;
   cPartChange(Sender);
+end;
+
+procedure TfRGB.mColorClick(Sender: TObject);
+var
+  r, g, b: byte;
+begin
+  { Get colors associated with menu entry }
+  r := redTable[TMenuItem(Sender).Tag];
+  g := greenTable[TMenuItem(Sender).Tag];
+  b := blueTable[TMenuItem(Sender).Tag];
+
+  sRed.Position := r;
+  sGreen.Position := g;
+  sBlue.Position := b;
+end;
+
+procedure TfRGB.mHelpAboutClick(Sender: TObject);
+begin
+{
+  MessageDlg(fRGB.Caption + #13#10'© 1997-1999 Peter Karlsson'#13#10'A Softwolves Software release in 1999'#13#10 +
+             'softwolves@softwolves.pp.se'#13#10'http://www.softwolves.pp.se/',
+             mtInformation, [mbOk], 0);
+}
+  fAbout.ShowModal;
+end;
+
+procedure TfRGB.mFileExitClick(Sender: TObject);
+var
+  rgbini: TIniFile;
+  i: byte;
+begin
+  rgbini := TIniFile.Create('win.ini');
+  rgbini.WriteInteger('HTMLRGB', 'R', fRGB.sRed.Position);
+  rgbini.WriteInteger('HTMLRGB', 'G', fRGB.sGreen.Position);
+  rgbini.WriteInteger('HTMLRGB', 'B', fRGB.sBlue.Position);
+  rgbini.WriteInteger('HTMLRGB', 'X', fRGB.Left);
+  rgbini.WriteInteger('HTMLRGB', 'Y', fRGB.Top);
+  rgbini.WriteInteger('HTMLRGB', 'Mode', fRGB.tabColour.PageIndex);
+  rgbini.WriteInteger('HTMLRGB', 'Index', fRGB.cPart.ItemIndex);
+  for i := 0 to 4 do
+    rgbini.WriteString('HTMLRGB', 'Color' + Char(i + 48),
+                       TColor_2_Hex(currcol[i]));
+  rgbini.Free;
+  Halt;
+end;
+
+procedure TfRGB.mViewRGBClick(Sender: TObject);
+begin
+  rgbmode := true;
+  { Sätt etiketter till RGB }
+  { Läs in RGB-värden }
+  { Ställ in redigeringsrutor och rullningslister }
+end;
+
+procedure TfRGB.mViewHSVClick(Sender: TObject);
+begin
+  rgbmode := false;
+  { Sätt etiketter till HSV }
+  { Läs in RGB-värden }
+  { Konvertera till HSV }
+  { Ställ in redigeringsrutor och rullningslister }
+end;
+
+procedure TfRGB.mViewSampleWindowClick(Sender: TObject);
+begin
+  if (fSample.Visible) then
+    fSample.Hide
+  else begin
+    fSample.Top := Top + Height;
+    fSample.Left := Left;
+    fSample.Show;
+  end;
 end;
 
 end.
