@@ -26,6 +26,7 @@ type
     procedure bCopyClick(Sender: TObject);
     procedure bPasteClick(Sender: TObject);
     procedure bCopyAllClick(Sender: TObject);
+    procedure doUpdate(ir, ig, ib: single);
   private
     { Private declarations }
   public
@@ -36,6 +37,8 @@ var
   fSample: TfSample;
 
 implementation
+
+uses Rgbu;
 
 {$R *.DFM}
 
@@ -62,6 +65,11 @@ begin
                       '" link="#'        + TColor_2_Hex(currcol[2]) +
                       '" alink="#'       + TColor_2_Hex(currcol[3]) +
                       '" vlink="#'       + TColor_2_Hex(currcol[4]) + '">';
+end;
+
+procedure TfSample.doUpdate(ir, ig, ib: single);
+begin
+  { Uppdatera exemplen TODO }
 end;
 
 end.

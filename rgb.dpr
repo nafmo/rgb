@@ -90,38 +90,22 @@ begin
       lang := 'eng';
   end;
   if lang = 'sve' then begin
-    fRGB.rBlack.Hint := 'Svart';
-    fRGB.rSilver.Hint := 'Silver';
-    fRGB.rGray.Hint := 'Grå';
-    fRGB.rWhite.Hint := 'Vit';
-    fRGB.rMaroon.Hint := 'Rödbrun';
-    fRGB.rRed.Hint := 'Röd';
-    fRGB.rPurple.Hint := 'Purpur';
-    fRGB.rFuchsia.Hint := 'Lila';
-    fRGB.rGreen.Hint := 'Grön';
-    fRGB.rLime.Hint := 'Limefärgad';
-    fRGB.rOlive.Hint := 'Olivfärgad';
-    fRGB.rYellow.Hint := 'Gul';
-    fRGB.rNavy.Hint := 'Marinblå';
-    fRGB.rBlue.Hint := 'Blå';
-    fRGB.rTeal.Hint := 'Cyan';
-    fRGB.rAqua.Hint := 'Ljus cyan';
   end else if lang = 'eng' then begin
     Application.Title := 'RedGreenBlue';
     fRGB.Caption := 'RedGreenBlue 1.1.1';
     fRGB.gbAll.Caption := 'Colour settings';
-    fRGB.lRed.Caption := '&Red:';
-    fRGB.lGreen.Caption := '&Green:';
-    fRGB.lBlue.Caption := '&Blue:';
-    fRGB.lHue.Caption := '&Hue:';
-    fRGB.lSaturation.Caption := '&Saturation';
-    fRGB.lValue.Caption := '&Value:';
+    fRGB.redCaption := '&Red:';
+    fRGB.greenCaption := '&Green:';
+    fRGB.blueCaption := '&Blue:';
+    fRGB.hueCaption := '&Hue:';
+    fRGB.saturationCaption := '&Saturation';
+    fRGB.valueCaption := '&Value:';
 
     fRGB.bQuit.Caption := 'E&xit';
     fRGB.bAbout.Caption := '&About';
-    fRGB.bCopy.Caption := 'C&opy';
-    fRGB.bCopyAll.Caption := 'Cop&y all';
-    fRGB.bPaste.Caption := '&Paste';
+    fSample.bCopy.Caption := 'C&opy';
+    fSample.bCopyAll.Caption := 'Cop&y all';
+    fSample.bPaste.Caption := '&Paste';
     fRGB.bSelect.Caption := '&Choose';
 
     fRGB.eRed.Hint := 'Red colour value (0-255)';
@@ -143,9 +127,9 @@ begin
     fRGB.bQuit.Hint := 'Exit the program';
     fRGB.lHTML.Hint := 'HTML colour code. Click to copy to the clipboard';
 
-    fRGB.bCopy.Hint := 'Copy colour code to clipboard';
-    fRGB.bCopyAll.Hint := 'Copy all code to clipboard';
-    fRGB.bPaste.Hint := 'Paste code from clipboard';
+    fSample.bCopy.Hint := 'Copy colour code to clipboard';
+    fSample.bCopyAll.Hint := 'Copy all code to clipboard';
+    fSample.bPaste.Hint := 'Paste code from clipboard';
     fRGB.bSelect.Hint := 'Choose in standard dialog';
     fRGB.eHTML.Hint := 'Enter HTML colour code here';
 
@@ -164,8 +148,8 @@ begin
     Application.Title := 'RotGrünBlau';
     fRGB.Caption := 'RotGrünBlau 1.1.1';
     fRGB.gbAll.Caption := 'Farbeinstellungen';
-    fRGB.lRed.Caption := '&Rot:';
-    fRGB.lGreen.Caption := '&Grün:';
+    fRGB.redCaption := '&Rot:';
+    fRGB.greenCaption := '&Grün:';
     fRGB.lBlue.Caption := '&Blau:';
     fRGB.lHue.Caption := '&Farbe:';
     fRGB.lSaturation.Caption := '&Sättigung:';
@@ -173,9 +157,9 @@ begin
 
     fRGB.bQuit.Caption := '&Verlassen';
     fRGB.bAbout.Caption := '&Über';
-    fRGB.bCopy.Caption := '&Kopieren';
-    fRGB.bCopyAll.Caption := 'H&TML';
-    fRGB.bPaste.Caption := '&Einfügen';
+    fSample.bCopy.Caption := '&Kopieren';
+    fSample.bCopyAll.Caption := 'H&TML';
+    fSample.bPaste.Caption := '&Einfügen';
     fRGB.bSelect.Caption := '&Wählen';
 
     fRGB.eRed.Hint := 'Farbwert rot (0-255)';
@@ -197,9 +181,9 @@ begin
     fRGB.bQuit.Hint := 'Programm verlassen';
     fRGB.lHTML.Hint := 'HTML-farbcode. Anklicken um im Clipboard hinzufügen';
 
-    fRGB.bCopy.Hint := 'HTML-farbcode kopieren';
-    fRGB.bCopyAll.Hint := 'HTML-code kopieren';
-    fRGB.bPaste.Hint := 'HTML-farbcode einfügen';
+    fSmpale.bCopy.Hint := 'HTML-farbcode kopieren';
+    fSample.bCopyAll.Hint := 'HTML-code kopieren';
+    fSample.bPaste.Hint := 'HTML-farbcode einfügen';
     fRGB.bSelect.Hint := 'In Standard-Dialog wählen';
     fRGB.eHTML.Hint := 'HTML-farbcode hier eingeben';
 
@@ -207,23 +191,6 @@ begin
     fRGB.tabColour.Pages[3] := 'HTML-&Code';
 
     fRGB.rOther.Caption := 'Andere';
-
-    fRGB.rBlack.Hint := 'Schwarz';
-    fRGB.rSilver.Hint := 'Silber';
-    fRGB.rGray.Hint := 'Grau';
-    fRGB.rWhite.Hint := 'Weiß';
-    fRGB.rMaroon.Hint := 'Kastanienbraun';
-    fRGB.rRed.Hint := 'Rot';
-    fRGB.rPurple.Hint := 'Purpurrot';
-    fRGB.rFuchsia.Hint := 'Lila';
-    fRGB.rGreen.Hint := 'Grün';
-    fRGB.rLime.Hint := 'Limefarbe';
-    fRGB.rOlive.Hint := 'Olivgrün';
-    fRGB.rYellow.Hint := 'Gelb';
-    fRGB.rNavy.Hint := 'Marineblau';
-    fRGB.rBlue.Hint := 'Blau';
-    fRGB.rTeal.Hint := 'Zyan';
-    fRGB.rAqua.Hint := 'Hellzyan';
 
     fRGB.bDecAll4.Hint := 'Alle Farben 4 Einheiten vermindern';
     fRGB.bDecAll.Hint := 'Alle Farben 1 Einheit vermindern';
@@ -235,8 +202,8 @@ begin
     Application.Title := 'RougeVertBleu';
     fRGB.Caption := 'RougeVertBleu 1.1.1';
     fRGB.gbAll.Caption := 'Couleur';
-    fRGB.lRed.Caption := '&Rouge:';
-    fRGB.lGreen.Caption := '&Vert:';
+    fRGB.redCaption := '&Rouge:';
+    fRGB.greenCaption := '&Vert:';
     fRGB.lBlue.Caption := '&Bleu:';
     fRGB.lHue.Caption := '&Tonalité:';
     fRGB.lSaturation.Caption := '&Saturation';
@@ -269,23 +236,6 @@ begin
 
     fRGB.rOther.Caption := 'Autre';
 
-    fRGB.rBlack.Hint := 'Noire';
-    fRGB.rSilver.Hint := 'Argent';
-    fRGB.rGray.Hint := 'Grise';
-    fRGB.rWhite.Hint := 'Blanche';
-    fRGB.rMaroon.Hint := 'Marron';
-    fRGB.rRed.Hint := 'Rouge';
-    fRGB.rPurple.Hint := 'Pourpre';
-    fRGB.rFuchsia.Hint := '[Lila]';
-    fRGB.rGreen.Hint := 'Verte';
-    fRGB.rLime.Hint := '[Limefarbe]';
-    fRGB.rOlive.Hint := 'Olive';
-    fRGB.rYellow.Hint := 'Jaune';
-    fRGB.rNavy.Hint := '[Marine]';
-    fRGB.rBlue.Hint := 'Bleue';
-    fRGB.rTeal.Hint := '[Zyan]';
-    fRGB.rAqua.Hint := '[Hellzyan]';
-
     fRGB.bDecAll4.Hint := 'Decrease all colours 4 steps';
     fRGB.bDecAll.Hint := 'Decrease all colours 1 step';
     fRGB.bIncAll.Hint := 'Increase all colours 1 steps';
@@ -296,12 +246,12 @@ begin
     Application.Title := 'RödGrönBlå';
     fRGB.Caption := 'RojoVerdeAzul 1.1.1';
     fRGB.gbAll.Caption := 'Color';
-    fRGB.lRed.Caption := '&Rojo:';
-    fRGB.lGreen.Caption := '&Verde:';
-    fRGB.lBlue.Caption := '&Azul:';
-    fRGB.lHue.Caption := '&Tonalidad';
-    fRGB.lSaturation.Caption := '&Saturación';
-    fRGB.lValue.Caption := '&Valor:';
+    fRGB.redCaption := '&Rojo:';
+    fRGB.greenCaption := '&Verde:';
+    fRGB.blueCaption := '&Azul:';
+    fRGB.hueCaption := '&Tonalidad';
+    fRGB.saturationCaption := '&Saturación';
+    fRGB.valueCaption := '&Valor:';
 
     fRGB.bQuit.Caption := '&Fin';
     fRGB.bAbout.Caption := '&Información';
@@ -329,23 +279,6 @@ begin
     fRGB.tabColour.Pages[3] := 'HTML &code';
 
     fRGB.rOther.Caption := 'Otro';
-
-    fRGB.rBlack.Hint := 'Negro';
-    fRGB.rSilver.Hint := 'Plata';
-    fRGB.rGray.Hint := 'Gris';
-    fRGB.rWhite.Hint := 'Blanco';
-    fRGB.rMaroon.Hint := 'Marrón';
-    fRGB.rRed.Hint := 'Rojo';
-    fRGB.rPurple.Hint := 'Púrpura';
-    fRGB.rFuchsia.Hint := '[Lila]';
-    fRGB.rGreen.Hint := 'Verde';
-    fRGB.rLime.Hint := '[Limefarbe]';
-    fRGB.rOlive.Hint := 'Oliva';
-    fRGB.rYellow.Hint := 'Amarillo';
-    fRGB.rNavy.Hint := '[Marina]';
-    fRGB.rBlue.Hint := 'Azul';
-    fRGB.rTeal.Hint := '[Zyan]';
-    fRGB.rAqua.Hint := '[Hellzyan]';
 
     fRGB.bDecAll4.Hint := 'Decrease all colours 4 steps';
     fRGB.bDecAll.Hint := 'Decrease all colours 1 step';

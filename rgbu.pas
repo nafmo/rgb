@@ -67,7 +67,6 @@ type
     procedure updateHTML(fromhsv, updatenames: boolean);
     procedure updateHTML2(Sender: TObject);
     procedure bQuitClick(Sender: TObject);
-    procedure bAboutClick(Sender: TObject);
     procedure lHTMLClick(Sender: TObject);
     procedure GetHSV(var h, s, v: single);
     procedure RGB_2_HSV(r, g, b: single; var h, s, v: single);
@@ -81,7 +80,6 @@ type
     procedure rNameClick(Sender: TObject);
     procedure bCopyClick(Sender: TObject);
     procedure eHTMLChange(Sender: TObject);
-    procedure bPasteClick(Sender: TObject);
     procedure bSelectClick(Sender: TObject);
     procedure eValueKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -113,14 +111,16 @@ type
   private
     { Private declarations }
     inupdate: boolean;
-    function hex(b: byte): string;
-    function TColor_2_Hex(c: TColor): string;
     { Aktuell färg }
     r, g, b: single;
+    function hex(b: byte): string;
+    function TColor_2_Hex(c: TColor): string;
   public
+    { Public declarations }
     rgbmode: boolean;
     currcol: array[0..5]  of TColor;
-    { Public declarations }
+    redCaption, greenCaption, blueCaption: string;
+    hueCaption, saturationCaption, valueCaption: string;
   end;
 
 var
@@ -161,7 +161,7 @@ procedure TfRGB.updateDisplay;
 Var
   h, s, v: single;
   ir, ig, ib: word;
-  str: string;
+  text: string;
   rgbcolor: TColor;
   rect: TRect;
 begin
@@ -183,12 +183,12 @@ begin
     sInput3.Position := ib;
 
     { Uppdatera inmatningsfält }
-    Str(ir, str);
-    eInput1.Text := str;
-    Str(ig, str);
-    eInput2.Text := str;
-    Str(ib, str);
-    eInput3.Text := str;
+    Str(ir, text);
+    eInput1.Text := text;
+    Str(ig, text);
+    eInput2.Text := text;
+    Str(ib, text);
+    eInput3.Text := text;
   end else begin
     { Sätt in HSV-värden  }
     RGB_2_HSV(r, g, b, h, s, v);
@@ -199,12 +199,12 @@ begin
     sInput3.Position := trunc(v * 100);
 
     { Uppdatera inmatningsfält }
-    Str(sInput1.Position / 10:1:1, str);
-    eInput1.Text := str;
-    Str(sInput2.Position / 100:1:2, str);
-    eInput2.Text := str;
-    Str(sInput3.Position / 100:1:2, str);
-    eInput3.Text := str;
+    Str(sInput1.Position / 10:1:1, text);
+    eInput1.Text := text;
+    Str(sInput2.Position / 100:1:2, text);
+    eInput2.Text := text;
+    Str(sInput3.Position / 100:1:2, text);
+    eInput3.Text := text;
   end;
 
   { Rita om kvadraten }
@@ -215,7 +215,7 @@ begin
   rgbcolor := ir or longint(ig) shl 8 or longint(ib) shl 16;
   pColor.Canvas.Brush.Color := rgbcolor;
   pColor.Color := rgbcolor;
-  pColor.Canval.FillRect(rect);
+  pColor.Canvas.FillRect(rect);
 
   { COMCTL-färgdialogen }
   dColor.Color := rgbcolor;
@@ -233,145 +233,112 @@ end;
 { *** Rullningslister *** }
 
 procedure TfRGB.sInput1Change(Sender: TObject);
-Var
-  s: string;
 begin
-  Str(sRed.Position, s);
-  eRed.Text := s;
-  fRGB.updateHTML(false, true);
+  if not inupdate then begin
+    if rgbmode then begin
+      r := sInput3.Position / 255;
+    end else begin
+      HSV_2_RGB(r, g, b,
+                sInput1.Position / 10,
+                sInput2.Position / 100,
+                sinput3.Position / 100);
+    end;
+    updateDisplay;
+  end;
 end;
 
 procedure TfRGB.sInput2Change(Sender: TObject);
-Var
-  s: string;
 begin
-  Str(sGreen.Position, s);
-  eGreen.Text := s;
-  fRGB.updateHTML(false, true);
+  if not inupdate then begin
+    if rgbmode then begin
+      g := sInput2.Position / 255;
+    end else begin
+      HSV_2_RGB(r, g, b,
+                sInput1.Position / 10,
+                sInput2.Position / 100,
+                sinput3.Position / 100);
+    end;
+    updateDisplay;
+  end;
 end;
 
 procedure TfRGB.sInput3Change(Sender: TObject);
-Var
-  s: string;
 begin
-  Str(sBlue.Position, s);
-  eBlue.Text := s;
-  fRGB.updateHTML(false, true);
+  if not inupdate then begin
+    if rgbmode then begin
+      b := sInput3.Position / 255;
+    end else begin
+      HSV_2_RGB(r, g, b,
+                sInput1.Position / 10,
+                sInput2.Position / 100,
+                sinput3.Position / 100);
+    end;
+    updateDisplay;
+  end;
 end;
-
-procedure TfRGB.sHueChange(Sender: TObject);
-Var
-  s: string;
-begin
-  Str(sHue.Position / 10:1:1, s);
-  eHue.Text := s;
-  fRGB.updateHTML(true, true);
-end;
-
-procedure TfRGB.sSaturationChange(Sender: TObject);
-Var
-  s: string;
-begin
-  Str(sSaturation.Position / 100:1:2, s);
-  eSaturation.Text := s;
-  fRGB.updateHTML(true, true);
-end;
-
-procedure TfRGB.sValueChange(Sender: TObject);
-Var
-  s: string;
-begin
-  Str(sValue.Position / 100:1:2, s);
-  eValue.Text := s;
-  fRGB.updateHTML(true, true);
-end;
-
-
 
 { *** Redigeringsrutor *** }
 
 procedure TfRGB.eInput1Change(Sender: TObject);
 Var
-  v: word;
+  v: single;
   t: integer;
 begin
-  Val(eRed.Text, v, t);
-  if t = 0 then
-    sRed.Position := v
-  else if eRed.Text <> '' then begin
-    sRed.Position := 0;
-    eRed.Text := '0';
+  if (eInput1.Text <> '') and (not inupdate) then begin
+    Val(eInput1.Text, v, t);
+    if t = 0 then begin
+      if rgbmode then begin
+        r := v / 255;
+      end else begin
+      HSV_2_RGB(r, g, b,
+                v,
+                sInput2.Position / 100,
+                sinput3.Position / 100);
+      end;
+      updateDisplay;
+    end;
   end;
 end;
 
 procedure TfRGB.eInput2Change(Sender: TObject);
 Var
-  v: word;
+  v: single;
   t: integer;
 begin
-  Val(eGreen.Text, v, t);
-  if t = 0 then
-    sGreen.Position := v
-  else if eGreen.Text <> '' then begin
-    sGreen.Position := 0;
-    eGreen.Text := '0';
+  if (eInput2.Text <> '') and (not inupdate) then begin
+    Val(eInput2.Text, v, t);
+    if t = 0 then begin
+      if rgbmode then begin
+        g := v / 255;
+      end else begin
+      HSV_2_RGB(r, g, b,
+                sInput1.Position / 10,
+                v,
+                sinput3.Position / 100);
+      end;
+      updateDisplay;
+    end;
   end;
 end;
 
 procedure TfRGB.eInput3Change(Sender: TObject);
 Var
-  v: word;
+  v: single;
   t: integer;
 begin
-  Val(eBlue.Text, v, t);
-  if t = 0 then
-    sBlue.Position := v
-  else if eBlue.Text <> '' then begin
-    sBlue.Position := 0;
-    eBlue.Text := '0';
-  end;
-end;
-
-
-procedure TfRGB.eHueChange(Sender: TObject);
-Var
-  f: single;
-  t: integer;
-begin
-  Val(eHue.Text, f, t);
-  if t = 0 then
-    sHue.Position := trunc(f * 10)
-  else if eHue.Text <> '' then begin
-    sHue.Position := 0;
-    eHue.Text := '0';
-  end;
-end;
-
-procedure TfRGB.eSaturationChange(Sender: TObject);
-Var
-  f: single;
-  t: integer;
-begin
-  Val(eSaturation.Text, f, t);
-  if t = 0 then
-    sSaturation.Position := trunc(f * 100)
-  else if eSaturation.Text <> '' then begin
-    sSaturation.Position := 0;
-    eSaturation.Text := '0';
-  end;
-end;
-
-procedure TfRGB.eValueChange(Sender: TObject);
-Var
-  f: single;
-  t: integer;
-begin
-  Val(eValue.Text, f, t);
-  if t = 0 then
-    sValue.Position := trunc(f * 100)
-  else if eBlue.Text <> '' then begin
-    sValue.Position := 0;
-    eValue.Text := '0';
+  if (eInput2.Text <> '') and (not inupdate) then begin
+    Val(eInput2.Text, v, t);
+    if t = 0 then begin
+      if rgbmode then begin
+        b := v / 255;
+      end else begin
+      HSV_2_RGB(r, g, b,
+                sInput1.Position / 10,
+                sInput2.Position / 100,
+                v);
+      end;
+      updateDisplay;
+    end;
   end;
 end;
 
@@ -398,10 +365,6 @@ end;
 
 { ***  *** }
 
-
-procedure TfRGB.bAboutClick(Sender: TObject);
-begin
-end;
 
 procedure TfRGB.lHTMLClick(Sender: TObject);
 begin
@@ -735,6 +698,10 @@ begin
   lHTMLLink.Invalidate;
   lHTMLALink.Invalidate;
   lHTMLVLink.Invalidate;
+  lInput1.Caption := redCaption;
+  lInput2.Caption := greenCaption;
+  lInput3.Caption := blueCaption;
+  { Hjälpetiketter TODO }
   initdone := true;
 end;
 
@@ -814,19 +781,41 @@ end;
 
 procedure TfRGB.mViewRGBClick(Sender: TObject);
 begin
+  inupdate := true;
   rgbmode := true;
   { Sätt etiketter till RGB }
-  { Läs in RGB-värden }
-  { Ställ in redigeringsrutor och rullningslister }
+  lInput1.Caption := redCaption;
+  lInput2.Caption := greenCaption;
+  lInput3.Caption := blueCaption;
+  { Hjälpetiketter TODO }
+
+  { Läs in RGB-värden TODO }
+  { Ställ in redigeringsrutor och rullningslister TODO }
+  sInput1.max := 255;
+  sInput2.max := 255;
+  sInput3.max := 255;
+
+  inupdate := false;
 end;
 
 procedure TfRGB.mViewHSVClick(Sender: TObject);
 begin
+  inupdate := true;
   rgbmode := false;
   { Sätt etiketter till HSV }
-  { Läs in RGB-värden }
-  { Konvertera till HSV }
-  { Ställ in redigeringsrutor och rullningslister }
+  lInput1.Caption := hueCaption;
+  lInput2.Caption := saturationCaption;
+  lInput3.Caption := valueCaption;
+  { Hjälpetiketter TODO }
+
+  { Läs in RGB-värden TODO }
+  { Konvertera till HSV TODO }
+  { Ställ in redigeringsrutor och rullningslister TODO }
+  sInput1.max := 3600;
+  sInput2.max := 100;
+  sInput3.max := 100;
+
+  inupdate := false;
 end;
 
 procedure TfRGB.mViewSampleWindowClick(Sender: TObject);
