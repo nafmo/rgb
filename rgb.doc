@@ -1,43 +1,49 @@
-RedGreenBlue 1.01 - (c) Copyright 1997 Peter Karlsson
-A Softwolves Software Release in 1997
+RedGreenBlue 1.1 - (c) Copyright 1997-1999 Peter Karlsson
+A Softwolves Software Release in 1999
+http://www.softwolves.pp.se/
 
 ENGLISH DOCUMENTATION
 
 * Legal mumbo-jumbo
 
-THIS SOFTWARE AND MANUAL ARE SOLD "AS IS" AND WITHOUT WARRANTIES AS TO
-PERFORMANCE OF MERCHANTABILITY OR ANY OTHER WARRANTIES WHETHER EXPRESSED OR
-IMPLIED. BECAUSE OF THE VARIOUS HARDWARE AND SOFTWARE ENVIRONMENTS INTO WHICH
-THIS PROGRAM MAY BE PUT, NO WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE IS
-OFFERED. GOOD DATA PROCESSING PROCEDURE DICTATES THAT ANY PROGRAM BE
-THOROUGHLY TESTED WITH NON- CRITICAL DATA BEFORE RELYING ON IT. THE USER MUST
-ASSUME THE ENTIRE RISK OF USING THE PROGRAM. ANY LIABILITY OF THE SELLER WILL
-BE LIMITED EXCLUSIVELY TO PRODUCT REPLACEMENT OR REFUND OF PURCHASE PRICE.
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License version 2, as published by the
+Free Software Foundation.
 
-This program is freeware. This means that you have all rights to freely
-distribute and use the program. The author will though retain all rights to
-the program. It may not be modified in any way. See above for address. When
-you distribute this program, make sure that all files described below are
-included.
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 675 Mass
+Ave, Cambridge, MA 02139, USA.
 
 * Usage
 
 This program is used to create RGB colour codes for HTML documents. You can
-change the red, green and blue components of the colour by moving the
-scrollbars, or writing a number in the appropriate edit box. The HTML colour
-code is displayed to the right of the colour sample box, and can be copied to
-the clipboard by clicking on it. Clicking on the 'Quit' button will exit the
-program.
+set the colour in many different ways; You can change the red, green and blue
+components of the colour by moving scrollbars, or writing a number in the
+appropriate edit box. You can change the hue, saturation and value components
+by moving scrollbars, or writing a number in the appropriate edit box. You can
+select any of the sixteen predefined HTML colour names by selecting the
+appropriate radio button. The HTML colour code is displayed to the right of
+the colour sample box, and can be copied to the clipboard by clicking on it.
+And using the HTML code tab, you can even create a complete BODY tag with all
+colours, which can easily be pasted into your HTML editor of choice. You can
+also paste a colour from the clipboard into RedGreenBlue, or enter its
+hexadecimal code in the appropriate box. Clicking the 'Quit' button will exit
+the program.
 
 * Command line parameters
 
 The command line format of RGB is:
 
-        rgb.exe [S|D|F|P|E] [-]
+        rgb.exe [S|D|E] [-]
 
-"S", "D", "F", "P" or "E" selects the language, S for Swedish, D for German, F
-for French, P for Spanish or E for English, if the autodetection doesn't work
-on your configuration. If used, this must always be the first parameter.
+"S", "D", or "E" selects the language, S for Swedish, D for German, or E for
+English, if the autodetection doesn't work on your configuration. If used,
+this must always be the first parameter.
 
 "-" makes RedGreenBlue always start centered on the screen (otherwise it will
 read the coordinates used last time).
@@ -45,8 +51,7 @@ read the coordinates used last time).
 * Author
 
 The author of this program is Peter Karlsson. I can be reached via e-mail at
-pk@abc.se or dat95pkn@idt.mdh.se, via fax +46-581-32110, via Fidonet netmail
-at 2:206/221 or via snailmail to
+peter@softwolves.pp.se, via Fidonet netmail at 2:206/221 or via snailmail to
 
         Peter Karlsson
         Värnsta, Ullersäter
@@ -59,12 +64,13 @@ The program is written using Borland Delphi 1.0.
 
 Thanks to my brother, Roger, for the idea.
 Thanks to Hans Le Roy <101525.162@compuserve.com> for the French and
-Spanish translations.
+Spanish translations of version 1.01.
 
                                     ----*----
 
-RödGrönBlå 1.01 - (c) Copyright 1997 Peter Karlsson
-A Softwolves Software Release in 1997
+RödGrönBlå 1.1 - (c) Copyright 1997-1999 Peter Karlsson
+A Softwolves Software Release in 1999
+http://www.softwolves.pp.se/
 
 SVENSK DOKUMENTATION
 
@@ -75,17 +81,24 @@ Se den engelska dokumentationen ovan.
 * Användning
 
 Detta program används för att skapa RGB-färgkoder för HTML-dokument. Du kan
-ändra den röda, gröna och blå delen av färgen genom att flytta
-rullningslisterna, eller skriva ett tal i motsvarande inmatningsruta.
-HTML-färgkoden visas till höger om färgtestrutan, och kan kopieras till
-Urklipp genom att klickas på. Om du klickar på knappen 'Avsluta' lämnar du
-programmet.
+välja färgen på flera olika sätt: Du kan ändra den röda, gröna och blå delen
+av färgen genom att flytta rullningslisterna, eller skriva ett tal i
+motsvarande inmatningsruta. Du kan ändra nyans-, mättnad- och styrkedelarna av
+färgen genom att flytta rullningslisterna, eller skriva ett tal i motsvarande
+inmatningsruta. Du kan välja vilken som helst av de sexton fördefinierade
+HTML-färgnamnen genom att välja motsvarande radioknapp. HTML-färgkoden visas
+till höger om färgtestrutan, och kan kopieras till Urklipp genom att klickas
+på. Och genom att använda HTML-kod-fliken kan du skapa ett komplett BODY-märke
+med alla färgattribut, vilket lätt kan klippas in i valfritt
+HTML-redigeringsprogram. Du kan även klistra en färg från Urklipp in i
+RödGrönBlå, eller ange färgens hexadecimala kod i motsvarande ruta. Om du
+klickar på knappen 'Avsluta' lämnar du programmet.
 
 * Kommandoradsparametrar
 
 Kommandoradsformatet för RGB är:
 
-        rgb.exe [S|D|F|P|E] [-]
+        rgb.exe [S|D|E] [-]
 
 "S", "D" eller "E" väljer språket, S för svenska, D för tyska, F för franska,
 P för spanska, eller E för engelska, om den automatiska detekteringen inte
@@ -98,8 +111,8 @@ in koordinaterna som senast användes).
 * Författaren
 
 Detta program är skrivet av Peter Karlsson. Jag kan nås via e-post på
-pk@abc.se eller dat95pkn@idt.mdh.se, fax 0581-32110, Fidonet netmail
-2:206/221 eller via vanlig post till adressen ovan.
+peter@softwolves.pp.se, via Fidonet netmail 2:206/221 eller via vanlig post
+till adressen ovan.
 
 Programmet är skrivet i Borland Delphi 1.0.
 
@@ -107,9 +120,10 @@ Programmet är skrivet i Borland Delphi 1.0.
 
 Tack till min bror, Roger, för idén.
 Tack till Hans Le Roy <101525.162@compuserve.com> för översättning till
-franska och spanska.
+franska och spanska av version 1.01.
 
                                     ----*----
 
 1.0  - 1997-08-02
 1.01 - 1997-10-22 - Added French and Spanish
+1.1  - 1999-06-08 - Added HSV, HTML name and direct code editing
