@@ -97,10 +97,9 @@ Kommandoradsformatet för RGB är:
 
         rgb.exe [S|D|E] [-]
 
-"S", "D" eller "E" väljer språket, S för svenska, D för tyska, F för franska,
-P för spanska, eller E för engelska, om den automatiska detekteringen inte
-fungerar i din konfiguration. Om den används måste den alltid vara den första
-parametern.
+"S", "D" eller "E" väljer språket, S för svenska, D för tyska, eller E för
+engelska, om den automatiska detekteringen inte fungerar i din konfiguration.
+Om den används måste den alltid vara den första parametern.
 
 "-" gör att RödGrönBlå alltid startar centrerad på skärmen (annars läser det
 in koordinaterna som senast användes).
