@@ -1,0 +1,106 @@
+French=F Spanish=E
+
+ Colour Settings
+    F: Couleur
+    E: Color
+ Red
+    F: Rouge
+    E: Rojo
+ Green
+    F: Vert
+    E: Verde
+ Blue
+    F: Bleu
+    E: Azul
+ About
+    F: Information
+    E: Información
+ Exit
+    F: Fin (Quitter)
+    E: Fin
+ Red colour value
+    F: Valeur du rouge
+    E: Valor del color rojo
+ Green colour value
+    F: Valeur du vert
+    E: Valor del color verde
+ Blue colour value
+    F: Valeur du bleu
+    E: Valor del color azul
+ Red colour control
+    F: Contrôle du rouge
+    E: Control del control rojo
+ Green colour control
+    F: Contrôle du vert
+    E: Control del color verde
+ Blue colour control
+    F: Contrôle du bleu
+    E: Control del color azul
+From 101525.162@compuserve.com Thu Oct 23 08:50:44 1997
+From: Hans Le Roy <101525.162@compuserve.com>
+To: "internet:dat95pkn@idt.mdh.se" <dat95pkn@idt.mdh.se>
+Date: Thu, 23 Oct 1997 02:39:21 -0400
+Subject: Re: RGB 1.0 - Upload permission requeste
+
+
+
+Hi Peter,
+
+>Sorry for not responding so fast, I've been quite busy.
+
+I understand perfectly.
+
+>I got your translations, but I need just a few more.
+
+No problem
+
+>"RedGreenBlue" (the program title, it adapts itself to the language,
+>too).
+
+I'd prefer to let it, as 'RGB' is documented and understood in both
+French and Spanish. If you wish:
+ E:     RojoVerdeAzul
+ F:     RougeVertBlue
+
+>"Colour sample"
+
+ E:     Muestra del color
+ F:     Échantillon de la couleur
+
+>"Information about the program"
+
+ E:     Información sobre el programa
+ F:     Information sur le programma
+
+"Exit the program"
+
+ E:     Cerrar el programa
+ F:     Quitter le programme
+
+"HTML colour code. Click to copy to the clipboard" >>
+
+ E:     Código HTML del color. Pinche para copiar en el pisapeles
+ F:     Code HTML de la couleur. Cliquez pour copier vers le
+presse-papiers
+
+ Just to be sure: I hope you can see the accents. Like:
+
+ é for e with accent aigu
+ ñ for n with tilde
+
+If not, send me a reply and I'll send you a Word document containing
+this thread - so I'm sure you'll get the accents right.
+
+Greetings to the North.
+
+ Hans Le Roy
+ Leuven, B
+ Sysop FRPROG & WINBEN
+ CS ID 101525,162
+ hleroy@mail.dotcom.fr
+ http://ourworld.compuserve.com/homepages/hlr
+ Wed, 22 Oct 1997
+ Using VA 4.01 build 232b (16-bit) Win3.10
+
+
+
