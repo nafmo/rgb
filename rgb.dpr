@@ -4,7 +4,8 @@ uses
   Forms,
   Rgbu in 'RGBU.PAS' {fRGB},
   IniFiles,
-  About in 'ABOUT.PAS' {fAbout};
+  About in 'ABOUT.PAS' {fAbout},
+  SysUtils;
 
 {$R *.RES}
 var
@@ -78,7 +79,7 @@ begin
       else  lang := 'eng';
     end;
   end else begin
-    lang := rgbini.ReadString('intl', 'sLanguage', 'eng');
+    lang := LowerCase(rgbini.ReadString('intl', 'sLanguage', 'eng'));
     if lang = 'enu' then lang := 'eng';
 {   if lang = 'frc' then lang := 'fra';}
 {   if lang = 'esn' then lang := 'esp';}
@@ -105,7 +106,7 @@ begin
     fRGB.rAqua.Hint := 'Ljus cyan';
   end else if lang = 'eng' then begin
     Application.Title := 'RedGreenBlue';
-    fRGB.Caption := 'RedGreenBlue 1.1';
+    fRGB.Caption := 'RedGreenBlue 1.1.1';
     fRGB.gbAll.Caption := 'Colour settings';
     fRGB.lRed.Caption := '&Red:';
     fRGB.lGreen.Caption := '&Green:';
@@ -159,7 +160,7 @@ begin
     fAbout.Caption := 'About';
   end else if lang ='deu' then begin
     Application.Title := 'RotGrünBlau';
-    fRGB.Caption := 'RotGrünBlau 1.1';
+    fRGB.Caption := 'RotGrünBlau 1.1.1';
     fRGB.gbAll.Caption := 'Farbeinstellungen';
     fRGB.lRed.Caption := '&Rot:';
     fRGB.lGreen.Caption := '&Grün:';
@@ -230,7 +231,7 @@ begin
     fAbout.Caption := 'Über';
   end else if lang = 'fra' then begin
     Application.Title := 'RougeVertBleu';
-    fRGB.Caption := 'RougeVertBleu 1.1';
+    fRGB.Caption := 'RougeVertBleu 1.1.1';
     fRGB.gbAll.Caption := 'Couleur';
     fRGB.lRed.Caption := '&Rouge:';
     fRGB.lGreen.Caption := '&Vert:';
@@ -291,7 +292,7 @@ begin
     fAbout.Caption := '&Information';
   end else if lang = 'esp' then begin
     Application.Title := 'RödGrönBlå';
-    fRGB.Caption := 'RojoVerdeAzul 1.1';
+    fRGB.Caption := 'RojoVerdeAzul 1.1.1';
     fRGB.gbAll.Caption := 'Color';
     fRGB.lRed.Caption := '&Rojo:';
     fRGB.lGreen.Caption := '&Verde:';
