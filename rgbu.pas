@@ -5,7 +5,7 @@ interface
 uses
   SysUtils, WinTypes, WinProcs, Messages, Classes, Graphics, Controls,
   Forms, Dialogs, StdCtrls, ExtCtrls, Clipbrd, IniFiles, TabNotBk, About,
-  ComCtrls, Menus;
+  ComCtrls;
 
 type
   TfRGB = class(TForm)

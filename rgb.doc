@@ -1,6 +1,7 @@
-RedGreenBlue 1.1 - (c) Copyright 1997-1999 Peter Karlsson
-A Softwolves Software Release in 1999
+RedGreenBlue 1.1.1 - (c) Copyright 1997-2001 Peter Karlsson
+A Softwolves Software Release in 2001
 http://www.softwolves.pp.se/
+softwolves@softwolves.pp.se
 
 ENGLISH DOCUMENTATION
 
@@ -51,25 +52,21 @@ read the coordinates used last time).
 * Author
 
 The author of this program is Peter Karlsson. I can be reached via e-mail at
-peter@softwolves.pp.se, via Fidonet netmail at 2:206/221 or via snailmail to
+softwolves@softwolves.pp.se.
 
-        Peter Karlsson
-        Värnsta, Ullersäter
-        SE-718 92  FRÖVI
-        Sweden
-
-The program is written using Borland Delphi 1.0.
+The program is written using Borland Delphi 4.0.
 
 * Thanks
 
 Thanks to my brother, Roger, for the idea.
 Thanks to Hans Le Roy <101525.162@compuserve.com> for the French and
 Spanish translations of version 1.01.
+Thanks to YOU for trying it out.
 
                                     ----*----
 
-RödGrönBlå 1.1 - (c) Copyright 1997-1999 Peter Karlsson
-A Softwolves Software Release in 1999
+RödGrönBlå 1.1.1 - (c) Copyright 1997-2001 Peter Karlsson
+A Softwolves Software Release in 2001
 http://www.softwolves.pp.se/
 
 SVENSK DOKUMENTATION
@@ -92,7 +89,7 @@ på. Och genom att använda HTML-kod-fliken kan du skapa ett komplett BODY-märke
 med alla färgattribut, vilket lätt kan klippas in i valfritt
 HTML-redigeringsprogram. Du kan även klistra en färg från Urklipp in i
 RödGrönBlå, eller ange färgens hexadecimala kod i motsvarande ruta. Om du
-klickar på knappen 'Avsluta' lämnar du programmet.
+klickar på knappen "Avsluta" lämnar du programmet.
 
 * Kommandoradsparametrar
 
@@ -111,19 +108,20 @@ in koordinaterna som senast användes).
 * Författaren
 
 Detta program är skrivet av Peter Karlsson. Jag kan nås via e-post på
-peter@softwolves.pp.se, via Fidonet netmail 2:206/221 eller via vanlig post
-till adressen ovan.
+softwolves@softwolves.pp.se.
 
-Programmet är skrivet i Borland Delphi 1.0.
+Programmet är skrivet i Borland Delphi 4.0.
 
 * Tack
 
 Tack till min bror, Roger, för idén.
 Tack till Hans Le Roy <101525.162@compuserve.com> för översättning till
 franska och spanska av version 1.01.
+Tack till DIG för att du testar programmet.
 
                                     ----*----
 
 1.0  - 1997-08-02
 1.01 - 1997-10-22 - Added French and Spanish
 1.1  - 1999-06-08 - Added HSV, HTML name and direct code editing
+1.1.1- 2001-04-26 - Win32 version; Delphi 4.0; Fix problems with large fonts
