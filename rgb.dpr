@@ -10,7 +10,7 @@ uses
 var
   rgbini: TIniFile;
   lang, s: string;
-  t: word;
+  t: integer;
   r, g, b: longint;
   ch: char;
   i: byte;
