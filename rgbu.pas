@@ -4,17 +4,15 @@ interface
 
 uses
   SysUtils, WinTypes, WinProcs, Messages, Classes, Graphics, Controls,
-  Forms, Dialogs, StdCtrls, ExtCtrls, Clipbrd, IniFiles, TabNotBk;
+  Forms, Dialogs, StdCtrls, ExtCtrls, Clipbrd, IniFiles, TabNotBk, About;
 
 type
   TfRGB = class(TForm)
-    gbSkrollar: TGroupBox;
-    pColor: TPaintBox;
+    gbAll: TGroupBox;
     lHTML: TLabel;
     bQuit: TButton;
     bAbout: TButton;
     iPictureRGB: TImage;
-    bev_pColor: TBevel;
     tabColour: TTabbedNotebook;
     lRed: TLabel;
     lGreen: TLabel;
@@ -51,6 +49,28 @@ type
     rTeal: TRadioButton;
     rAqua: TRadioButton;
     rOther: TRadioButton;
+    eHTML: TEdit;
+    lCode1: TLabel;
+    lCode3: TLabel;
+    bCopy: TButton;
+    bPaste: TButton;
+    dColor: TColorDialog;
+    bDecAll: TButton;
+    bIncAll4: TButton;
+    bDecAll4: TButton;
+    bIncAll: TButton;
+    cPart: TComboBox;
+    lCode2: TLabel;
+    paSample: TPanel;
+    pBackground: TPaintBox;
+    lHTMLLink: TLabel;
+    lHTMLALink: TLabel;
+    lHTMLVlink: TLabel;
+    lHTMLText: TLabel;
+    bSelect: TButton;
+    bCopyAll: TButton;
+    paColor: TPanel;
+    pColor: TPaintBox;
     procedure sRedChange(Sender: TObject);
     procedure sGreenChange(Sender: TObject);
     procedure sBlueChange(Sender: TObject);
@@ -72,12 +92,38 @@ type
     procedure eSaturationChange(Sender: TObject);
     procedure eValueChange(Sender: TObject);
     procedure rNameClick(Sender: TObject);
+    procedure bCopyClick(Sender: TObject);
+    procedure eHTMLChange(Sender: TObject);
+    procedure bPasteClick(Sender: TObject);
+    procedure bSelectClick(Sender: TObject);
+    procedure eValueKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure eHueKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure eSaturationKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure bDecAll4Click(Sender: TObject);
+    procedure bDecAllClick(Sender: TObject);
+    procedure bIncAllClick(Sender: TObject);
+    procedure bIncAll4Click(Sender: TObject);
+    procedure pBackgroundRedraw(Sender: TObject);
+    procedure cPartChange(Sender: TObject);
+    procedure fRGBActivate(Sender: TObject);
+    procedure bCopyAllClick(Sender: TObject);
+    procedure lHTMLTextClick(Sender: TObject);
+    procedure lHTMLLinkClick(Sender: TObject);
+    procedure lHTMLALinkClick(Sender: TObject);
+    procedure lHTMLVlinkClick(Sender: TObject);
+    procedure pBackgroundClick(Sender: TObject);
   private
     { Private declarations }
     inupdate: boolean;
+    function hex(b: byte): string;
+    function TColor_2_Hex(c: TColor): string;
   public
     rgbmode: boolean;
     colours: array[0..16] of TRadioButton;
+    currcol: array[0..5]  of TColor;
     { Public declarations }
   end;
 
@@ -92,10 +138,27 @@ const
     ( $0, $c0,$80,$ff,$0, $0, $0, $0, $80,$ff,$80,$ff,$0 ,$0, $80,$ff);
   blueTable: array[0..15] of byte =
     ( $0, $c0,$80,$ff,$0, $0, $80,$ff,$0, $0, $0, $0, $80,$ff,$80,$ff);
+  rect2: TRect =
+    (Left: 0; Top: 0; Right: 285; Bottom: 45);
+ initdone: boolean = false;
 
 implementation
 
 {$R *.DFM}
+
+function TfRGB.hex(b: byte): string;
+const
+  hexarr: array[0..15] of char = '0123456789abcdef';
+begin
+  hex := hexarr[b shr 4] + hexarr[b and 15];
+end;
+
+function TfRGB.TColor_2_Hex(c: TColor): string;
+begin
+  TColor_2_Hex := hex( c         and 255) +
+                  hex((c shr 8)  and 255) +
+                  hex((c shr 16) and 255);
+end;
 
 { *** Rullningslister *** }
 
@@ -242,6 +305,26 @@ begin
   end;
 end;
 
+procedure TfRGB.eHTMLChange(Sender: TObject);
+var
+  r, g, b: byte;
+  t: integer;
+begin
+  If (not inupdate) and (length(eHTML.Text) = 6) then begin
+    Val('$' + Copy(eHTML.Text, 1, 2), r, t);
+    if t = 0 then begin
+      Val('$' + Copy(eHTML.Text, 3, 2), g, t);
+      if t = 0 then begin
+        Val('$' + Copy(eHTML.Text, 5, 2), b, t);
+        if t = 0 then begin
+          fRGB.sRed.Position   := r;
+          fRGB.sGreen.Position := g;
+          fRGB.sBlue.Position  := b;
+        end;
+      end;
+    end;
+  end;
+end;
 
 { ***  *** }
 
@@ -249,6 +332,7 @@ end;
 procedure TfRGB.bQuitClick(Sender: TObject);
 var
   rgbini: TIniFile;
+  i: byte;
 begin
   rgbini := TIniFile.Create('win.ini');
   rgbini.WriteInteger('HTMLRGB', 'R', fRGB.sRed.Position);
@@ -257,14 +341,22 @@ begin
   rgbini.WriteInteger('HTMLRGB', 'X', fRGB.Left);
   rgbini.WriteInteger('HTMLRGB', 'Y', fRGB.Top);
   rgbini.WriteInteger('HTMLRGB', 'Mode', fRGB.tabColour.PageIndex);
+  rgbini.WriteInteger('HTMLRGB', 'Index', fRGB.cPart.ItemIndex);
+  for i := 0 to 4 do
+    rgbini.WriteString('HTMLRGB', 'Color' + Char(i + 48),
+                       TColor_2_Hex(currcol[i]));
   rgbini.Free;
   Halt;
 end;
 
 procedure TfRGB.bAboutClick(Sender: TObject);
 begin
-  MessageDlg(fRGB.Caption + #13#10'© 1997,1998 Peter Karlsson'#13#10'A Softwolves Software release in 1998',
+{
+  MessageDlg(fRGB.Caption + #13#10'© 1997-1999 Peter Karlsson'#13#10'A Softwolves Software release in 1999'#13#10 +
+             'softwolves@softwolves.pp.se'#13#10'http://www.softwolves.pp.se/',
              mtInformation, [mbOk], 0);
+}
+  fAbout.ShowModal;
 end;
 
 procedure TfRGB.lHTMLClick(Sender: TObject);
@@ -287,12 +379,6 @@ begin
 end;
 
 procedure TfRGB.updateHTML(fromhsv, updatenames: boolean);
-  function hex(b: byte): string;
-  const
-    hexarr: array[0..15] of char = '0123456789abcdef';
-  begin
-    hex := hexarr[b shr 4] + hexarr[b and 15];
-  end;
 var
   rgbcolor: TColor;
   r, g, b, h, s, v: single;
@@ -300,9 +386,9 @@ var
   st: string;
   i, found: byte;
 const
-  rect: TRect = (Left: 0; Top: 0; Right: 57; Bottom: 57);
+  rect: TRect = (Left: 0; Top: 0; Right: 57;  Bottom: 57);
 begin
-  if inupdate then exit;
+  if inupdate or not initdone then exit;
   inupdate := true;
 
   if fromhsv then begin
@@ -312,6 +398,7 @@ begin
     ig := trunc(g * 255);
     ib := trunc(b * 255);
     fRGB.lHTML.Caption := '#' + hex(ir) + hex(ig) + hex(ib);
+    fRGB.eHTML.Text := hex(ir) + hex(ig) + hex(ib);
     rgbcolor := ir or longint(ig) shl 8 or longint(ib) shl 16;
 
     fRGB.sRed.Position := ir;
@@ -326,6 +413,8 @@ begin
     eBlue.Text := st;
   end else begin
     fRGB.lHTML.Caption := '#' + hex(fRGB.sRed.Position) +
+      hex(fRGB.sGreen.Position) + hex(fRGB.sBlue.Position);
+    fRGB.eHTML.Text := hex(fRGB.sRed.Position) +
       hex(fRGB.sGreen.Position) + hex(fRGB.sBlue.Position);
     rgbcolor := fRGB.sRed.Position or longint(fRGB.sGreen.Position) shl 8 or
       longint(fRGB.sBlue.Position) shl 16;
@@ -351,7 +440,28 @@ begin
   end;
 
   fRGB.pColor.Canvas.Brush.Color := rgbcolor;
+  fRGB.dColor.Color := rgbcolor;
   fRGB.pColor.Canvas.FillRect(rect);
+
+  currcol[fRGB.cPart.ItemIndex] := rgbcolor;
+  case fRGB.cPart.ItemIndex of
+    0: begin
+         pBackground.Canvas.Brush.Color := rgbcolor;
+         pBackground.Canvas.FillRect(rect2);
+         lHTMLText.Color  := rgbcolor;
+         lHTMLLink.Color  := rgbcolor;
+         lHTMLALink.Color := rgbcolor;
+         lHTMLVLink.Color := rgbcolor;
+       end;
+    1: lHTMLText.Font.Color  := rgbcolor;
+    2: lHTMLLink.Font.Color  := rgbcolor;
+    3: lHTMLALink.Font.Color := rgbcolor;
+    4: lHTMLVLink.Font.Color := rgbcolor;
+  end;
+  lHTMLText.Refresh;
+  lHTMLLink.Refresh;
+  lHTMLALink.Refresh;
+  lHTMLVLink.Refresh;
 
   If updatenames then begin
     found := 16;
@@ -463,6 +573,173 @@ begin
   sRed.Position := r;
   sGreen.Position := g;
   sBlue.Position := b;
+end;
+
+procedure TfRGB.bCopyClick(Sender: TObject);
+begin
+  ClipBoard.AsText := fRGB.eHTML.Text;
+end;
+
+
+procedure TfRGB.bPasteClick(Sender: TObject);
+var
+  s: string;
+begin
+  s := ClipBoard.AsText;
+  if length(s) = 6 then
+    fRGB.eHTML.Text := s
+  else if (s[1] = '#') and (length(s) = 7) then
+    fRGB.eHTML.Text := Copy(s, 2, 6);
+end;
+
+procedure TfRGB.bSelectClick(Sender: TObject);
+var
+  r, g, b: byte;
+begin
+  If dColor.Execute then begin
+    r := (dColor.Color and $000000ff);
+    g := (dColor.Color and $0000ff00) shr 8;
+    b := (dColor.Color and $00ff0000) shr 16;
+    sRed.Position   := r;
+    sGreen.Position := g;
+    sBlue.Position  := b;
+  end;
+end;
+
+procedure TfRGB.eValueKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  If Key = VK_RETURN then eValueChange(Sender);
+end;
+
+procedure TfRGB.eHueKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  If Key = VK_RETURN then eHueChange(Sender);
+end;
+
+procedure TfRGB.eSaturationKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  If Key = VK_RETURN then eSaturationChange(Sender);
+end;
+
+procedure TfRGB.bDecAll4Click(Sender: TObject);
+begin
+  sRed.Position   := sRed.Position   - 4;
+  sGreen.Position := sGreen.Position - 4;
+  sBlue.Position  := sBlue.Position  - 4;
+end;
+
+procedure TfRGB.bDecAllClick(Sender: TObject);
+begin
+  sRed.Position   := sRed.Position   - 1;
+  sGreen.Position := sGreen.Position - 1;
+  sBlue.Position  := sBlue.Position  - 1;
+end;
+
+procedure TfRGB.bIncAllClick(Sender: TObject);
+begin
+  sRed.Position   := sRed.Position   + 1;
+  sGreen.Position := sGreen.Position + 1;
+  sBlue.Position  := sBlue.Position  + 1;
+end;
+
+procedure TfRGB.bIncAll4Click(Sender: TObject);
+begin
+  sRed.Position   := sRed.Position   + 4;
+  sGreen.Position := sGreen.Position + 4;
+  sBlue.Position  := sBlue.Position  + 4;
+end;
+
+procedure TfRGB.pBackgroundRedraw(Sender: TObject);
+begin
+  pBackground.Canvas.Brush.Color := currcol[0];
+  pBackground.Canvas.FillRect(rect2);
+  lHTMLText.Color  := currcol[0];
+  lHTMLLink.Color  := currcol[0];
+  lHTMLALink.Color := currcol[0];
+  lHTMLVLink.Color := currcol[0];
+  lHTMLText.Font.Color  := currcol[1];
+  lHTMLLink.Font.Color  := currcol[2];
+  lHTMLALink.Font.Color := currcol[3];
+  lHTMLVLink.Font.Color := currcol[4];
+  lHTMLText.Refresh;
+  lHTMLLink.Refresh;
+  lHTMLALink.Refresh;
+  lHTMLVLink.Refresh;
+end;
+
+procedure TfRGB.cPartChange(Sender: TObject);
+var
+  c: TColor;
+begin
+  c := currcol[cPart.ItemIndex];
+  sRed.Position   :=  c         and 255;
+  sGreen.Position := (c shr 8)  and 255;
+  sBlue.Position  := (c shr 16) and 255;
+  lHTMLText.Update;
+  lHTMLLink.Update;
+  lHTMLALink.Update;
+  lHTMLVLink.Update;
+end;
+
+procedure TfRGB.fRGBActivate(Sender: TObject);
+begin
+  pBackground.Canvas.Brush.Color := currcol[0];
+  pBackground.Canvas.FillRect(rect2);
+  lHTMLText.Color  := currcol[0];
+  lHTMLLink.Color  := currcol[0];
+  lHTMLALink.Color := currcol[0];
+  lHTMLVLink.Color := currcol[0];
+  lHTMLText.Font.Color  := currcol[1];
+  lHTMLLink.Font.Color  := currcol[2];
+  lHTMLALink.Font.Color := currcol[3];
+  lHTMLVLink.Font.Color := currcol[4];
+  lHTMLText.Invalidate;
+  lHTMLLink.Invalidate;
+  lHTMLALink.Invalidate;
+  lHTMLVLink.Invalidate;
+  initdone := true;
+end;
+
+procedure TfRGB.bCopyAllClick(Sender: TObject);
+begin
+  ClipBoard.AsText := '<body bgcolor="#' + TColor_2_Hex(currcol[0]) +
+                      '" text="#'        + TColor_2_Hex(currcol[1]) +
+                      '" link="#'        + TColor_2_Hex(currcol[2]) +
+                      '" alink="#'       + TColor_2_Hex(currcol[3]) +
+                      '" vlink="#'       + TColor_2_Hex(currcol[4]) + '">';
+end;
+
+procedure TfRGB.lHTMLTextClick(Sender: TObject);
+begin
+  cPart.ItemIndex := 1;
+  cPartChange(Sender);
+end;
+
+procedure TfRGB.lHTMLLinkClick(Sender: TObject);
+begin
+  cPart.ItemIndex := 2;
+  cPartChange(Sender);
+end;
+
+procedure TfRGB.lHTMLALinkClick(Sender: TObject);
+begin
+  cPart.ItemIndex := 3;
+  cPartChange(Sender);
+end;
+
+procedure TfRGB.lHTMLVlinkClick(Sender: TObject);
+begin
+  cPart.ItemIndex := 4;
+  cPartChange(Sender);
+end;
+
+procedure TfRGB.pBackgroundClick(Sender: TObject);
+begin
+  cPart.ItemIndex := 0;
+  cPartChange(Sender);
 end;
 
 end.

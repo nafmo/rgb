@@ -3,18 +3,22 @@ program Rgb;
 uses
   Forms,
   Rgbu in 'RGBU.PAS' {fRGB},
-  IniFiles;
+  IniFiles,
+  About in 'ABOUT.PAS' {fAbout};
 
 {$R *.RES}
 var
   rgbini: TIniFile;
-  lang: string;
+  lang, s: string;
+  t: word;
+  r, g, b: longint;
   ch: char;
+  i: byte;
 begin
   { Startvärden för programmet }
   Application.Title := 'RödGrönBlå';
   Application.CreateForm(TfRGB, fRGB);
-  { Lägg in färgknapparna i en vektor }
+  Application.CreateForm(TfAbout, fAbout);
   fRGB.colours[0] := fRGB.rBlack;
   fRGB.colours[1] := fRGB.rSilver;
   fRGB.colours[2] := fRGB.rGray;
@@ -34,6 +38,20 @@ begin
   fRGB.colours[16]:= fRGB.rOther;
   { Hämta inställningar }
   rgbini := TIniFile.Create('win.ini');
+  fRGB.cPart.ItemIndex := rgbini.ReadInteger('HTMLRGB', 'Index', 0);
+  for i := 0 to 4 do begin
+    s := rgbini.ReadString('HTMLRGB', 'Color' + Char(i + 48), '000000');
+    Val('$' + Copy(s, 1, 2), r, t);
+    if t = 0 then begin
+      Val('$' + Copy(s, 3, 2), g, t);
+      if t = 0 then begin
+        Val('$' + Copy(s, 5, 2), b, t);
+        if t = 0 then begin
+          fRGB.currcol[i] := r or g shl 8 or b shl 16;
+        end;
+      end;
+    end;
+  end;
   fRGB.sRed.Position   := rgbini.ReadInteger('HTMLRGB', 'R', 0);
   fRGB.sGreen.Position := rgbini.ReadInteger('HTMLRGB', 'G', 0);
   fRGB.sBlue.Position  := rgbini.ReadInteger('HTMLRGB', 'B', 0);
@@ -55,17 +73,17 @@ begin
     case UpCase(ch) of
       'S':  lang := 'sve';
       'D':  lang := 'deu';
-      'F':  lang := 'fra';
-      'P':  lang := 'esp';
+{     'F':  lang := 'fra';}
+{     'P':  lang := 'esp';}
       else  lang := 'eng';
     end;
   end else begin
     lang := rgbini.ReadString('intl', 'sLanguage', 'eng');
     if lang = 'enu' then lang := 'eng';
-    if lang = 'frc' then lang := 'fra';
-    if lang = 'esn' then lang := 'esp';
-    if (lang <> 'eng') and (lang <> 'sve') and (lang <> 'deu') and
-       (lang <> 'fra') and (lang <> 'esp') then
+{   if lang = 'frc' then lang := 'fra';}
+{   if lang = 'esn' then lang := 'esp';}
+    if (lang <> 'eng') and (lang <> 'sve') and (lang <> 'deu')
+      {and (lang <> 'fra') and (lang <> 'esp')} then
       lang := 'eng';
   end;
   if lang = 'sve' then begin
@@ -88,7 +106,7 @@ begin
   end else if lang = 'eng' then begin
     Application.Title := 'RedGreenBlue';
     fRGB.Caption := 'RedGreenBlue 1.1';
-    fRGB.gbSkrollar.Caption := 'Colour settings';
+    fRGB.gbAll.Caption := 'Colour settings';
     fRGB.lRed.Caption := '&Red:';
     fRGB.lGreen.Caption := '&Green:';
     fRGB.lBlue.Caption := '&Blue:';
@@ -98,6 +116,10 @@ begin
 
     fRGB.bQuit.Caption := 'E&xit';
     fRGB.bAbout.Caption := '&About';
+    fRGB.bCopy.Caption := 'C&opy';
+    fRGB.bCopyAll.Caption := 'Cop&y all';
+    fRGB.bPaste.Caption := '&Paste';
+    fRGB.bSelect.Caption := '&Choose';
 
     fRGB.eRed.Hint := 'Red colour value (0-255)';
     fRGB.eGreen.Hint := 'Green colour value (0-255)';
@@ -118,13 +140,27 @@ begin
     fRGB.bQuit.Hint := 'Exit the program';
     fRGB.lHTML.Hint := 'HTML colour code. Click to copy to the clipboard';
 
+    fRGB.bCopy.Hint := 'Copy colour code to clipboard';
+    fRGB.bCopyAll.Hint := 'Copy all code to clipboard';
+    fRGB.bPaste.Hint := 'Paste code from clipboard';
+    fRGB.bSelect.Hint := 'Choose in standard dialog';
+    fRGB.eHTML.Hint := 'Enter HTML colour code here';
+
     fRGB.tabColour.Pages[2] := 'HTML &names';
+    fRGB.tabColour.Pages[3] := 'HTML &code';
 
     fRGB.rOther.Caption := 'Other';
+
+    fRGB.bDecAll4.Hint := 'Decrease all colours 4 steps';
+    fRGB.bDecAll.Hint := 'Decrease all colours 1 step';
+    fRGB.bIncAll.Hint := 'Increase all colours 1 step';
+    fRGB.bIncAll4.Hint := 'Increase all colours 4 steps';
+
+    fAbout.Caption := 'About';
   end else if lang ='deu' then begin
     Application.Title := 'RotGrünBlau';
     fRGB.Caption := 'RotGrünBlau 1.1';
-    fRGB.gbSkrollar.Caption := 'Farbeinstellungen';
+    fRGB.gbAll.Caption := 'Farbeinstellungen';
     fRGB.lRed.Caption := '&Rot:';
     fRGB.lGreen.Caption := '&Grün:';
     fRGB.lBlue.Caption := '&Blau:';
@@ -134,6 +170,10 @@ begin
 
     fRGB.bQuit.Caption := '&Verlassen';
     fRGB.bAbout.Caption := '&Über';
+    fRGB.bCopy.Caption := '&Kopieren';
+    fRGB.bCopyAll.Caption := 'H&TML';
+    fRGB.bPaste.Caption := '&Einfügen';
+    fRGB.bSelect.Caption := '&Wählen';
 
     fRGB.eRed.Hint := 'Farbwert rot (0-255)';
     fRGB.eGreen.Hint := 'Farbwert grün (0-255)';
@@ -154,7 +194,14 @@ begin
     fRGB.bQuit.Hint := 'Programm verlassen';
     fRGB.lHTML.Hint := 'HTML-farbcode. Anklicken um im Clipboard hinzufügen';
 
-    fRGB.tabColour.Pages[2] := 'HTML-&Namem';
+    fRGB.bCopy.Hint := 'HTML-farbcode kopieren';
+    fRGB.bCopyAll.Hint := 'HTML-code kopieren';
+    fRGB.bPaste.Hint := 'HTML-farbcode einfügen';
+    fRGB.bSelect.Hint := 'In Standard-Dialog wählen';
+    fRGB.eHTML.Hint := 'HTML-farbcode hier eingeben';
+
+    fRGB.tabColour.Pages[2] := '&Namen';
+    fRGB.tabColour.Pages[3] := 'HTML-&Code';
 
     fRGB.rOther.Caption := 'Andere';
 
@@ -174,10 +221,17 @@ begin
     fRGB.rBlue.Hint := 'Blau';
     fRGB.rTeal.Hint := 'Zyan';
     fRGB.rAqua.Hint := 'Hellzyan';
+
+    fRGB.bDecAll4.Hint := 'Alle Farben 4 Einheiten vermindern';
+    fRGB.bDecAll.Hint := 'Alle Farben 1 Einheit vermindern';
+    fRGB.bIncAll.Hint := 'Alle Farben 1 Einheit vermehren';
+    fRGB.bIncAll4.Hint := 'Alle Farben 4 Einheiten vermehren';
+
+    fAbout.Caption := 'Über';
   end else if lang = 'fra' then begin
     Application.Title := 'RougeVertBleu';
     fRGB.Caption := 'RougeVertBleu 1.1';
-    fRGB.gbSkrollar.Caption := 'Couleur';
+    fRGB.gbAll.Caption := 'Couleur';
     fRGB.lRed.Caption := '&Rouge:';
     fRGB.lGreen.Caption := '&Vert:';
     fRGB.lBlue.Caption := '&Bleu:';
@@ -208,6 +262,7 @@ begin
     fRGB.lHTML.Hint := 'Code HTML de la couleur. Cliquez pour copier vers le presse-papiers';
 
     fRGB.tabColour.Pages[2] := 'HTML &Noms';
+    fRGB.tabColour.Pages[3] := 'HTML &code';
 
     fRGB.rOther.Caption := 'Autre';
 
@@ -227,10 +282,17 @@ begin
     fRGB.rBlue.Hint := 'Bleue';
     fRGB.rTeal.Hint := '[Zyan]';
     fRGB.rAqua.Hint := '[Hellzyan]';
+
+    fRGB.bDecAll4.Hint := 'Decrease all colours 4 steps';
+    fRGB.bDecAll.Hint := 'Decrease all colours 1 step';
+    fRGB.bIncAll.Hint := 'Increase all colours 1 steps';
+    fRGB.bIncAll4.Hint := 'Increase all colours 4 steps';
+
+    fAbout.Caption := '&Information';
   end else if lang = 'esp' then begin
     Application.Title := 'RödGrönBlå';
     fRGB.Caption := 'RojoVerdeAzul 1.1';
-    fRGB.gbSkrollar.Caption := 'Color';
+    fRGB.gbAll.Caption := 'Color';
     fRGB.lRed.Caption := '&Rojo:';
     fRGB.lGreen.Caption := '&Verde:';
     fRGB.lBlue.Caption := '&Azul:';
@@ -261,6 +323,7 @@ begin
     fRGB.lHTML.Hint := 'Código HTML del color. Pinche para copiar en el pisapeles';
 
     fRGB.tabColour.Pages[2] := 'HTML &Nombres';
+    fRGB.tabColour.Pages[3] := 'HTML &code';
 
     fRGB.rOther.Caption := 'Otro';
 
@@ -280,7 +343,15 @@ begin
     fRGB.rBlue.Hint := 'Azul';
     fRGB.rTeal.Hint := '[Zyan]';
     fRGB.rAqua.Hint := '[Hellzyan]';
+
+    fRGB.bDecAll4.Hint := 'Decrease all colours 4 steps';
+    fRGB.bDecAll.Hint := 'Decrease all colours 1 step';
+    fRGB.bIncAll.Hint := 'Increase all colours 1 steps';
+    fRGB.bIncAll4.Hint := 'Increase all colours 4 steps';
+
+    fAbout.Caption := '&Información';
   end;
+  fAbout.lTitle.Caption := fRGB.Caption;
   { Vi behöver inte INI-filen mer nu }
   rgbini.Free;
   { Kör }
