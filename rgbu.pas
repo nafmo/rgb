@@ -5,7 +5,7 @@ interface
 uses
   SysUtils, WinTypes, WinProcs, Messages, Classes, Graphics, Controls,
   Forms, Dialogs, StdCtrls, ExtCtrls, Clipbrd, IniFiles, TabNotBk, About,
-  ComCtrls;
+  ComCtrls, Menus;
 
 type
   TfRGB = class(TForm)
@@ -130,6 +130,7 @@ type
 
 var
   fRGB: TfRGB;
+  rect2: TRect;
   StrRed, StrGreen, StrBlue, StrHue, StrSaturation, StrValue: string;
 
 const
@@ -139,8 +140,6 @@ const
     ( $0, $c0,$80,$ff,$0, $0, $0, $0, $80,$ff,$80,$ff,$0 ,$0, $80,$ff);
   blueTable: array[0..15] of byte =
     ( $0, $c0,$80,$ff,$0, $0, $80,$ff,$0, $0, $0, $0, $80,$ff,$80,$ff);
-  rect2: TRect =
-    (Left: 0; Top: 0; Right: 285; Bottom: 45);
  initdone: boolean = false;
 
 implementation
@@ -386,11 +385,14 @@ var
   ir, ig, ib: word;
   st: string;
   i, found: byte;
-const
-  rect: TRect = (Left: 0; Top: 0; Right: 57;  Bottom: 57);
+  rect: TRect;
 begin
   if inupdate or not initdone then exit;
   inupdate := true;
+  rect.Left := 0;
+  rect.Top := 0;
+  rect.Right := pColor.Width;
+  rect.Bottom := pColor.Height;
 
   if fromhsv then begin
     GetHSV(h, s, v);
@@ -687,6 +689,10 @@ end;
 
 procedure TfRGB.fRGBActivate(Sender: TObject);
 begin
+  rect2.Left := 0;
+  rect2.Top := 0;
+  rect2.Right := pBackground.Width;
+  rect2.Bottom := pBackground.Height;
   pBackground.Canvas.Brush.Color := currcol[0];
   pBackground.Canvas.FillRect(rect2);
   lHTMLText.Color  := currcol[0];
